@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Hot Pepper グルメ検索</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<!--検索-->
+<body>
+    <h1>Hot Pepper グルメ検索</h1>
+    <form id="searchform" method="get" action="/search">
+
+        <label>キーワード: 
+            <input type="text" name="keyword" placeholder="キーワードを入力">
+        </label><br>
+
+        <label>検索範囲:
+            <select name="range">
+                <option value="3" selected>1000m</option>
+                <option value="5">3000m</option>
+            </select>
+        </label><br>
+
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lng" id="lng">
+
+        <button type="button" onclick="GeolocationGET()">検索</button>
+    </form>
+
+    <p id ="status">検索ボタンを押すと位置情報を取得します</p>
+
+    <!--現在地取得　Geolocation API-->
+    <script>
+        function GeolocationGET(){
+            if (navigator.geolocation){
+                document.getElementById("status").textContent = "現在地を取得中...";
+                
+                navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+                    function successCallback(position){
+                        //現在地の緯度経度をセット
+                        document.getElementById("lat").value = position.coords.latitude;
+                        document.getElementById("lng").value = position.coords.longitude;
+                        document.getElementById("status").textContent = "現在地の取得に成功しました！";
+
+                        //フォーム送信
+                        document.getElementById("searchform").submit();
+                    };
+                    
+                    function errorCallback(error){
+                        let message = "";
+                        switch (error.code) {
+                            case 1:
+                                message = "ユーザーによって位置情報の取得が拒否されました。";
+                                break;
+                            case 2:
+                                message = "位置情報が取得できませんでした。";
+                                break;
+                            case 3:
+                                message = "位置情報の取得がタイムアウトしました。";
+                                break;
+                            default:
+                                message = "不明なエラーが発生しました。";
+                        }
+                        console.error("Geolocation error:", error);
+                        document.getElementById("status").textContent = message + "（エラーコード: " + error.code + "）";
+                    }
+            }else{
+                document.getElementById("status").textContent = "このブラウザは位置情報取得に対応していません";
+            }
+        }
+        
+    </script>
+</body>
+</html>

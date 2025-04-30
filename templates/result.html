@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    {% if shops %}
+        <h2>「{{ keyword }}」の検索結果</h2>
+        <h6>全{{ total }}件    画像タップで詳細確認</h6><br>
+        <h6>　　・────────────────────────────────────────・<h6>
+        <ul>
+        <!-- 一覧表示 -->
+        {% for shop in shops %}
+            <li>
+                <strong>{{ shop.name }}</strong><br>
+                <a href="{{ url_for('detail_form', shop_id = shop.id, keyword=keyword, lat=lat, lng=lng, range=range_value) }}" rel="noopener"><img src="{{ shop.photo.pc.s }}"></a><br>
+                {{ shop.genre.name }} . {{ shop.distance_km }} km<br>
+                {{ shop.open }}<br><br>
+            </li>
+            <h6>・────────────────────────────────────────・</h6>
+        {% endfor %}
+        </ul>
+        
+        <!-- ページネーションリンク -->
+        <div>
+            {{ pagination.links }}
+        </div>
+
+    {% else %}
+        <p>該当する店舗が見つかりませんでした。</p>
+    {% endif %}
+</body>
+
+<!-- 検索画面に戻る -->
+<footer>
+    <a href="{{ url_for('search_form') }}" rel="noopener">検索画面に戻る</a>
+</footer>
+
+</html>

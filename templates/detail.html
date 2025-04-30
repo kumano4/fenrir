@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">    
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ googlemaps_api_key }}"></script>
+    <style>
+        #map {
+          height: 500px;
+          width: 100%;
+        }
+    </style>
+
+    <script>
+        function initMap() {
+            var shop_location = { lat: parseFloat('{{ shop.lat }}'), lng: parseFloat('{{ shop.lng }}') };
+
+            var map = new google.maps.Map(document.getElementById("map"), {
+                center: shop_location,
+                zoom: 14
+            });
+
+            var marker = new google.maps.Marker({
+                position: shop_location,
+                map: map,
+                title: '{{ shop.name }}'
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+
+</head>
+
+<body>
+    <h6>{{ shop.genre.name }}/コース{{ shop.course }}/飲み放題{{ shop.free_drink }}/食べ放題{{ shop.free_food }}/個室{{ shop.private_room }}/カード{{ shop.card }}/{{ shop.non_smoking }}/駐車場{{ shop.parking }}/</h6>
+    <h6>・────────────────────────────────────────・</h6>
+
+    {{ shop.catch }}<br>
+    <strong>{{ shop.name }}</strong><br>
+
+    <img src="{{ shop.photo.pc.l }}"><br>
+    ─{{ shop.address }}　　{{ shop.mobile_access }}<br>
+    ─予算:{{ shop.budget.average }}<br>
+    ─営業時間:{{ shop.open }}<br>
+    ─定休日:{{ shop.close }}<br>
+    <a href="{{ shop.urls.pc }}" rel="noopener">ホットペッパーグルメページへ</a>
+    
+
+    <div id="map"></div>
+
+
+
+</body>
+
+<footer>
+    <a href="{{ url_for('result_form', keyword=keyword, lat=lat, lng=lng, range=range_value) }}" rel="noopener">検索結果画面に戻る</a>
+</footer>
+
+</html>
